@@ -2,19 +2,16 @@
 # pip install bs4
 # 팬텀JS http://phantomjs.org/download.html
 # pip install pymysql #데이터 베이스
-from selenium import webdriver as wd
-from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup as bs
-
-from Person import PersonInfo
-import time
-import sys
-'''
-from selenium.webdriver.common.by import By
+# from selenium.webdriver.common.by import By
 # 명시적 대기를 위해
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-'''
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+
+from selenium import webdriver as wd
+from selenium import selectWindow
+from bs4 import BeautifulSoup as bs
+import sys
+
 # 사전에 필요한 정보를 로드
 main_url = 'http://www.gamejob.co.kr/Login/Login_GI.asp'
 search_url = 'http://www.gamejob.co.kr/List_GG/GG_Part_Search.asp?Part_Code=2&car_u=0&car_d=1&age_u=1999&age_d=1988&S_Keyword='
@@ -64,15 +61,15 @@ for page in range(1, 5):#16):
             try:
                 count += 1
                 print(count, p_url)
-                ############ 접속 불가시에 예외처리
+
                 try:
                     driver.get(p_url)
                     driver.implicitly_wait(2)
                     soup = bs(driver.page_source, 'html.parser')
-                except Exception as e3:
-                    driver.find_element_by_name("Value").send_keys(Keys.ENTER)
+                except Exception as e3:############ 접속 불가시에 예외처리
+                    selectWindow(name="new window")
+                    print('오류 e3 ', e3)
                     continue
-
 
                 #name , email 추출
                 name_list = soup.findAll("font",{"class":"b c_skyblue"})
@@ -92,10 +89,10 @@ for page in range(1, 5):#16):
                 f.write(name[0:3]+",")
                 f.write(email+"\n")
             except Exception as e2:
-                print(count, e2)
+                print('오류 e2 ', e2)
                 break
     except Exception as e:
-        print('오류-------------------', e)
+        print('오류 e ', e)
 
 # 종료
 f.close()
