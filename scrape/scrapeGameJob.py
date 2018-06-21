@@ -36,8 +36,9 @@ driver.get(search_url)
 #파일 오픈
 f = open(file_name,'w')
 
-for page in range(2, 3):#16):
+for page in range(2, 4):#16):
     try:
+        ############ 페이지 변경안되는 문제
         driver.execute_script("Javascript:go_db_page(this.form,%s)" % page)
         driver.implicitly_wait(2)
         print("%s 페이지 이동" % page)
@@ -73,6 +74,7 @@ for page in range(2, 3):#16):
                 name_list = soup.findAll("font",{"class":"b c_skyblue"})
                 name = name_list[0].get_text()
                 print(name)
+
                 ############ email 없을 경우 예외처리
                 email_list = soup.findAll("font", {"class": "c_blue"})
                 email = email_list[0].get_text()
