@@ -3,11 +3,12 @@
 # 팬텀JS http://phantomjs.org/download.html
 # pip install pymysql #데이터 베이스
 from selenium import webdriver as wd
+from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup as bs
+
 from Person import PersonInfo
 import time
 import sys
-
 '''
 from selenium.webdriver.common.by import By
 # 명시적 대기를 위해
@@ -31,14 +32,13 @@ driver.find_element_by_name('M_ID').send_keys(id)
 driver.find_element_by_name('M_PWD').send_keys(password)
 driver.find_element_by_id('send_img').click()
 driver.implicitly_wait(2)
-driver.get(search_url)
 
 #파일 오픈
 f = open(file_name,'w')
-
-for page in range(2, 4):#16):
+count = 0
+for page in range(1, 5):#16):
     try:
-        ############ 페이지 변경안되는 문제
+        driver.get(search_url)
         driver.execute_script("Javascript:go_db_page(this.form,%s)" % page)
         driver.implicitly_wait(2)
         print("%s 페이지 이동" % page)
@@ -60,25 +60,32 @@ for page in range(2, 4):#16):
                 print('오류',e1)
 
         #url에 접속해 필요 정보 추출(Email, 이름)
-        count = 0
         for p_url in people_url:
             try:
                 count += 1
                 print(count, p_url)
                 ############ 접속 불가시에 예외처리
-                driver.get(p_url) 
-                driver.implicitly_wait(2)
-                soup = bs(driver.page_source, 'html.parser')
+                try:
+                    driver.get(p_url)
+                    driver.implicitly_wait(2)
+                    soup = bs(driver.page_source, 'html.parser')
+                except Exception as e3:
+                    driver.find_element_by_name("Value").send_keys(Keys.ENTER)
+                    continue
+
 
                 #name , email 추출
                 name_list = soup.findAll("font",{"class":"b c_skyblue"})
                 name = name_list[0].get_text()
-                print(name)
+                print('Name : ', name)
 
-                ############ email 없을 경우 예외처리
                 email_list = soup.findAll("font", {"class": "c_blue"})
-                email = email_list[0].get_text()
-                print(email)
+                if len(email_list)>=1:# email 없을 경우 예외처리
+                    email = email_list[0].get_text()
+                    print('E-Mail : ',email)
+                else:
+                    email = "E-Mail 없음"
+                    print("E-Mail 없음")
 
                 #파일 입력
                 f.write(str(count)+",")
@@ -88,7 +95,7 @@ for page in range(2, 4):#16):
                 print(count, e2)
                 break
     except Exception as e:
-        print('오류', e)
+        print('오류-------------------', e)
 
 # 종료
 f.close()
