@@ -34,16 +34,21 @@ driver.find_element_by_class_name('btn_box_close').click()
 driver.find_element_by_id('btn-display-save-list').click()
 driver.implicitly_wait(2)
 save_option_area = driver.find_element_by_id('save_option_area')
-type(save_option_area)
+print(type(save_option_area))
 link_element = save_option_area.find_element_by_class_name('title')
-type(link_element)
+print(type(link_element))
 link_element.click()
+driver.implicitly_wait(2)
 
 # #파일 오픈
 # f = open(file_name,'w')
 # count = 0
-# for page in range(10, 12):
-#     try:
+for page in range(1, 3):
+    try:
+        driver.find_elements_by_xpath("//button[@class = 'page'][@value='%s']" % page)
+    < a class ="title resumeSubject" target="_blank"
+    href="/zf_user/mandb/view?res_idx=8256999&amp;alertStyle=2&amp;open_type=default&amp;route=talent_search&amp;code=search&amp;search=reading"
+    data-res_idx="8256999" title="전자공학과 졸업생입니다." >전자공학과 졸업생입니다. < / a >
 #         driver.get(search_url)
 #         driver.execute_script("Javascript:go_db_page(this.form,%s)" % page)
 #         driver.implicitly_wait(2)
