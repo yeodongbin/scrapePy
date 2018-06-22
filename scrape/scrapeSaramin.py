@@ -33,10 +33,12 @@ driver.get(search_url)
 driver.find_element_by_class_name('btn_box_close').click()
 driver.find_element_by_id('btn-display-save-list').click()
 driver.implicitly_wait(2)
-driver.find_element_by_class_name('btn_search btn_typ_b3').click()
-#
+save_option_area = driver.find_element_by_id('save_option_area')
+type(save_option_area)
+link_element = save_option_area.find_element_by_class_name('title')
+type(link_element)
+link_element.click()
 
-#
 # #파일 오픈
 # f = open(file_name,'w')
 # count = 0
