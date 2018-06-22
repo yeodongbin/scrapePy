@@ -1,11 +1,11 @@
-# pip install selenium
-# pip install bs4
-# 팬텀JS http://phantomjs.org/download.html
-# pip install pymysql #데이터 베이스
-# from selenium.webdriver.common.by import By
+# pip install selenium 설치함
+# pip install bs4      설치함
+# 팬텀JS http://phantomjs.org/download.html 설치안함
+# pip install pymysql #데이터 베이스 설치안함
+# from selenium.webdriver.common.by import By 설치안함
 # 명시적 대기를 위해
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.support.ui import WebDriverWait 설치안함
+# from selenium.webdriver.support import expected_conditions as EC 설치안함
 
 from selenium import webdriver as wd
 from bs4 import BeautifulSoup as bs
@@ -32,20 +32,19 @@ driver.implicitly_wait(2)
 #파일 오픈
 f = open(file_name,'w')
 count = 0
-for page in range(10, 12):
+for page in range(1, 12):
     try:
         driver.get(search_url)
         driver.execute_script("Javascript:go_db_page(this.form,%s)" % page)
         driver.implicitly_wait(2)
-        print("\n********** %s 페이지 이동 **********\n" % page)
+        print("\n****************** %s 페이지 이동 ******************\n" % page)
         people_url = []
 
         people_title = driver.find_elements_by_xpath("//td[@class = 'p_list']")
         #print(len(people_title), type(people_title))
 
-        if (len(people_title))==22:
-            del people_title[0:2]
-            print(len(people_title), type(people_title))
+        del people_title[0:2]
+        print('페이지 인원 : ',len(people_title), type(people_title))
 
         #개인 url 추출
         for p_title in people_title:
