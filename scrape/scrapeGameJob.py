@@ -8,7 +8,6 @@
 # from selenium.webdriver.support import expected_conditions as EC
 
 from selenium import webdriver as wd
-from selenium import selectWindow
 from bs4 import BeautifulSoup as bs
 import sys
 
@@ -33,12 +32,12 @@ driver.implicitly_wait(2)
 #파일 오픈
 f = open(file_name,'w')
 count = 0
-for page in range(1, 5):#16):
+for page in range(1, 11):
     try:
         driver.get(search_url)
         driver.execute_script("Javascript:go_db_page(this.form,%s)" % page)
         driver.implicitly_wait(2)
-        print("%s 페이지 이동" % page)
+        print("********** %s 페이지 이동 **********" % page)
         people_url = []
 
         people_title = driver.find_elements_by_xpath("//td[@class = 'p_list']")
@@ -66,8 +65,9 @@ for page in range(1, 5):#16):
                     driver.get(p_url)
                     driver.implicitly_wait(2)
                     soup = bs(driver.page_source, 'html.parser')
-                except Exception as e3:############ 접속 불가시에 예외처리
-                    selectWindow(name="new window")
+                except Exception as e3:# 접속 불가시에 예외처리
+                    alrt = driver.switch_to_alert()#popup close
+                    alrt.accept()
                     print('오류 e3 ', e3)
                     continue
 
