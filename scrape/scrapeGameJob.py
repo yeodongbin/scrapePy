@@ -32,12 +32,12 @@ driver.implicitly_wait(2)
 #파일 오픈
 f = open(file_name,'w')
 count = 0
-for page in range(1, 11):
+for page in range(10, 12):
     try:
         driver.get(search_url)
         driver.execute_script("Javascript:go_db_page(this.form,%s)" % page)
         driver.implicitly_wait(2)
-        print("********** %s 페이지 이동 **********" % page)
+        print("\n********** %s 페이지 이동 **********\n" % page)
         people_url = []
 
         people_title = driver.find_elements_by_xpath("//td[@class = 'p_list']")
