@@ -9,6 +9,7 @@
 
 from selenium import webdriver as wd
 from bs4 import BeautifulSoup as bs
+import time
 import sys
 
 # 사전에 필요한 정보를 로드
@@ -17,6 +18,8 @@ search_url = 'http://www.saramin.co.kr/zf_user/talent/search'
 id = "kitri"
 password = "kitri0908"
 file_name = "Saramin.txt"
+ELEMENT_COUNT_PER_PAGE = 20
+PAGE_COUNT = 10
 
 # 드라이버 로드 # 윈도우용
 driver = wd.Chrome(executable_path='chromedriver.exe')
@@ -39,16 +42,48 @@ link_element = save_option_area.find_element_by_class_name('title')
 print(type(link_element))
 link_element.click()
 driver.implicitly_wait(2)
+time.sleep(2) #페이지 이동간 대기
 
-# #파일 오픈
-# f = open(file_name,'w')
-# count = 0
-for page in range(1, 3):
+element_count = int(driver.find_element_by_id('resumeCnt').text.replace(',',''))
+page_count = element_count // ELEMENT_COUNT_PER_PAGE # TOTAL PAGE COUNT
+list_count = element_count // (ELEMENT_COUNT_PER_PAGE*PAGE_COUNT)
+
+#각 타이틀별로 url 이동
+people_url = []
+people_title = driver.find_elements_by_xpath("//a[@class = 'title resumeSubject']")
+for p_title in people_title:
     try:
-        driver.find_elements_by_xpath("//button[@class = 'page'][@value='%s']" % page)
-    < a class ="title resumeSubject" target="_blank"
-    href="/zf_user/mandb/view?res_idx=8256999&amp;alertStyle=2&amp;open_type=default&amp;route=talent_search&amp;code=search&amp;search=reading"
-    data-res_idx="8256999" title="전자공학과 졸업생입니다." >전자공학과 졸업생입니다. < / a >
+        p_url = p_title.find_element_by_css_selector('a').get_attribute('href')
+        people_url.append(p_url)
+    except Exception as e1:
+        print('오류', e1)
+
+count = 0
+for p_url in people_url:
+    count += 1
+    print(count, p_url)
+    driver.get(p_url)
+    driver.implicitly_wait(2)
+    soup = bs(driver.page_source, 'html.parser')
+
+# 페이지 이동하는 코드
+# for list_number in range(1, list_count):
+#     print('PAGE NUMBER', list_number)
+#     count = 1
+#     pages_url = driver.find_elements_by_class_name('page')
+#     btn_next_url = driver.find_elements_by_class_name('btn_next')
+#     for page_url in pages_url:
+#         page_url.click()  # page_url로 이동하기
+#         count = count+1
+#         driver.implicitly_wait(2)
+#         if ((count % PAGE_COUNT) == 0):
+#             btn_next_url[1].click()
+#             time.sleep(2)
+
+
+#페이지 담기
+#     try:
+#         driver.find_elements_by_xpath("//button[@class = 'page'][@value='%s']" % page)
 #         driver.get(search_url)
 #         driver.execute_script("Javascript:go_db_page(this.form,%s)" % page)
 #         driver.implicitly_wait(2)
@@ -108,6 +143,10 @@ for page in range(1, 3):
 #                 break
 #     except Exception as e:
 #         print('오류 e ', e)
+
+# 파일 오픈
+# f = open(file_name,'w')
+# # count = 0
 
 # 종료
 # # f.close()
