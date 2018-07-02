@@ -14,6 +14,7 @@ import sys
 # 사전에 필요한 정보를 로드
 main_url = 'http://www.gamejob.co.kr/Login/Login_GI.asp'
 search_url = 'http://www.gamejob.co.kr/List_GG/GG_Part_Search.asp?Part_Code=2&car_u=0&car_d=1&age_u=1999&age_d=1988&S_Keyword='
+platform_develop_url = 'http://www.gamejob.co.kr/List_GG/GG_Part_Search.asp?Part_Code=12&car_u=0&car_d=1&age_u=1999&age_d=1988&S_Keyword='
 id = "kitri"
 password = "kitri0908"
 file_name = "GameJob.txt"
@@ -32,9 +33,9 @@ driver.implicitly_wait(2)
 #파일 오픈
 f = open(file_name,'w')
 count = 0
-for page in range(1, 12):
+for page in range(1, 9):
     try:
-        driver.get(search_url)
+        driver.get(platform_develop_url)
         driver.execute_script("Javascript:go_db_page(this.form,%s)" % page)
         driver.implicitly_wait(2)
         print("\n****************** %s 페이지 이동 ******************\n" % page)
@@ -43,7 +44,7 @@ for page in range(1, 12):
         people_title = driver.find_elements_by_xpath("//td[@class = 'p_list']")
         #print(len(people_title), type(people_title))
 
-        del people_title[0:2]
+        # del people_title[0:2]
         print('페이지 인원 : ',len(people_title), type(people_title))
 
         #개인 url 추출
