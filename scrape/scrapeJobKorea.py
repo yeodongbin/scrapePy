@@ -1,5 +1,6 @@
 
 from selenium import webdriver as wd
+from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup as bs
 import sys
 
@@ -26,9 +27,38 @@ driver.get(search_url)
 driver.implicitly_wait(2)
 
 
-for page in range(2, 9):
-    try :
+# 페이지 이동
+# pages = ['2','3']
+# for page in pages:
+#     print(type(page))
+#     driver.find_element_by_partial_link_text(page).click()
+#     driver.implicitly_wait(2)
+# <a href="#" data-page="2">2</a>
+# <a href="#" data-page="2">2</a>
+# <a href="#" data-page="3">3</a>
+#dvBasicResumeList > section > div.tplPagination.js-ListPaging > ul > li:nth-child(3) > a
+#//*[@id="dvBasicResumeList"]/section/div[2]/ul/li[2]/a
 
-        driver.execute_script("Javascript:data-page(this.form,%s)" % page)
-    except Exception as e:
-        print('오류 e ', e)
+
+#개인 정보 취합
+# i = 0
+# people_url = driver.find_elements_by_id('linkResume2')
+# for p_url in people_url:
+#     i += 1
+#     p_url.click()
+#     # Keys.TAB
+#     # Keys.TAB
+#     # Keys.TAB
+#     # Keys.ENTER
+#     print(i)
+
+
+
+
+# for page in range(2, 9):
+#     try :
+#         driver.execute_script("Javascript:data-page(this.form,%s)" % page)
+#     except Exception as e:
+#         print('오류 e ', e)
+
+#driver.quit()
