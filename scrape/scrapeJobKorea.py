@@ -4,6 +4,19 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup as bs
 import sys
 
+#함수 정의
+def getLinks(source):
+    websiteLinks = []
+    for link in source.find_all('a'):
+        url = link.get('href')
+        if url:
+            websiteLinks.append(url)
+
+    for link in websiteLinks:
+        print(link)
+
+    return websiteLinks
+
 # 사전에 필요한 정보를 로드
 main_url = 'http://www.jobkorea.co.kr/Corp/Main'
 search_url = 'http://www.jobkorea.co.kr/Corp/Person/FindByKey?key=bkFZGbH5eiM5qhQXmKw0GBV_QPacryptoMS7TmyjYuX8sjMoNkQS2fNRiIWQeBXFe5Fpf'
@@ -41,16 +54,22 @@ driver.implicitly_wait(2)
 
 
 #개인 정보 취합
-# i = 0
-# people_url = driver.find_elements_by_id('linkResume2')
+
+#
+# p_url = driver.find_element_by_id('linkResume2')
+# url = p_url.find_element_by_css_selector('a').get_attribute('href')
+# #people_id = driver.find_elements_by_id('linkResume2').get_attribute('href')
+# print(url)
+#print(people_id)
+i = 0
 # for p_url in people_url:
 #     i += 1
-#     p_url.click()
+#
 #     # Keys.TAB
 #     # Keys.TAB
 #     # Keys.TAB
 #     # Keys.ENTER
-#     print(i)
+#     print(url)
 
 
 
