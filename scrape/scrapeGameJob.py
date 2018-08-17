@@ -13,7 +13,7 @@ import sys
 
 # 사전에 필요한 정보를 로드
 main_url = 'http://www.gamejob.co.kr/Login/Login_GI.asp'
-search_url = 'http://www.gamejob.co.kr/List_GG/GG_Part_Search.asp?Part_Code=2&car_u=0&car_d=1&age_u=1999&age_d=1988&S_Keyword='
+search_url = 'http://www.gamejob.co.kr/List_GG/GG_Total_Search.asp?b_code=0&code=0&car_u=0&car_d=1&age_u=1999&age_d=1988'
 platform_develop_url = 'http://www.gamejob.co.kr/List_GG/GG_Part_Search.asp?Part_Code=12&car_u=0&car_d=1&age_u=1999&age_d=1988&S_Keyword='
 id = "kitri"
 password = "kitri0908"
@@ -33,9 +33,9 @@ driver.implicitly_wait(2)
 #파일 오픈
 f = open(file_name,'w')
 count = 0
-for page in range(1, 9):
+for page in range(1, 200):
     try:
-        driver.get(platform_develop_url)
+        driver.get(search_url)
         driver.execute_script("Javascript:go_db_page(this.form,%s)" % page)
         driver.implicitly_wait(2)
         print("\n****************** %s 페이지 이동 ******************\n" % page)

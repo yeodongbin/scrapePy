@@ -20,8 +20,8 @@ password = "kitri0908"
 file_name = "Saramin.txt"
 ELEMENT_COUNT_PER_PAGE = 20
 PAGE_COUNT = 10
-start_age = 26
-end_age = 28
+start_age = 21
+end_age = 25
 
 # 드라이버 로드 # 윈도우용
 driver = wd.Chrome(executable_path='chromedriver.exe')
@@ -66,7 +66,7 @@ count = 0;
 
 # 페이지 이동하는 코드
 count = 1
-for next_count in range(1,2): #next 버튼
+for next_count in range(1,5): #next 버튼
     pages_url = driver.find_elements_by_class_name("page")
     print(len(pages_url))
 
