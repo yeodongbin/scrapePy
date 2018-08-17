@@ -20,8 +20,9 @@ password = "kitri0908"
 file_name = "Saramin.txt"
 ELEMENT_COUNT_PER_PAGE = 20
 PAGE_COUNT = 10
-start_age = 21
-end_age = 25
+search_count = 100 # 찾는 자료 갯수 설저
+start_age = 0    # 검색 시작 나이<동작안함
+end_age = 0      # 검색 시작 나이<동작안함
 
 # 드라이버 로드 # 윈도우용
 driver = wd.Chrome(executable_path='chromedriver.exe')
@@ -46,8 +47,12 @@ link_element.click()
 driver.implicitly_wait(2)
 
 # 나이 입력
-driver.find_element_by_xpath('//*[@id="max-age"]/option[10]').click()#26세
-driver.find_element_by_xpath('//*[@id="min-age"]/option[4]').click() #28세
+#driver.find_element_by_id('max-age').find_element_by_link_text("26세 (1993년)").click()
+#driver.find_element_by_id('min-age').find_element_by_link_text("28세 (1991년)").click()
+#driver.find_element_by_xpath('//*[@id="max-age"]/option[13]').click()#29
+#driver.find_element_by_xpath('//*[@id="min-age"]/option[4]').click() #31
+driver.find_element_by_xpath('//*[@id="max-age"]/option[10]').click() #26
+driver.find_element_by_xpath('//*[@id="min-age"]/option[4]').click()  #28
 time.sleep(2) #페이지 이동간 대기
 
 #Element 확인 (검색된 전체 인원 파악)
@@ -66,13 +71,11 @@ count = 0;
 
 # 페이지 이동하는 코드
 count = 1
-for next_count in range(1,5): #next 버튼
+for next_count in range(1,page_count): #next 버튼
     pages_url = driver.find_elements_by_class_name("page")
-    print(len(pages_url))
-
-    for index in range(1,10):
+    #driver.find_element_by_xpath('//*[@id="pagingArea"]/div/button[10]').click()
+    for index in range(1,11):
         pages_url = driver.find_elements_by_class_name("page")
-        print(len(pages_url))
         pages_url[index].click()
         time.sleep(2)  # 페이지 이동간 대기
 
@@ -110,7 +113,7 @@ for next_count in range(1,5): #next 버튼
                 p_info = driver.find_element_by_class_name('myname').text
                 phone = driver.find_element_by_class_name('phone').text
                 email = driver.find_element_by_class_name('mail').text
-                print(p_info[:3],phone[:14],email)
+                print(count,p_info[:3],phone[:14],email)
 
                 # 파일 입력
                 if email!='비공개':
@@ -118,6 +121,10 @@ for next_count in range(1,5): #next 버튼
                     f.write(p_info[:3] + ",")
                     f.write(phone[:14] + ",")
                     f.write(email + "\n")
+                    if count ==search_count:
+                        print("searching complete!!")
+                        sys.exit(1)
+
                     count += 1
             except Exception as e1:
                 print('오류')
