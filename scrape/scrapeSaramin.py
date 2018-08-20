@@ -74,7 +74,7 @@ count = 1
 for next_count in range(1,page_count): #next 버튼
     pages_url = driver.find_elements_by_class_name("page")
     #driver.find_element_by_xpath('//*[@id="pagingArea"]/div/button[10]').click()
-    for index in range(1,11):
+    for index in range(0,11):
         pages_url = driver.find_elements_by_class_name("page")
         pages_url[index].click()
         time.sleep(2)  # 페이지 이동간 대기
