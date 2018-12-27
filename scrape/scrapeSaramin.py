@@ -1,9 +1,9 @@
 # pip install selenium
 # pip install bs4
-# 팬텀JS http://phantomjs.org/download.html
+### 팬텀JS http://phantomjs.org/download.html
 # pip install pymysql #데이터 베이스
 # from selenium.webdriver.common.by import By
-# 명시적 대기를 위해
+### 명시적 대기를 위해
 # from selenium.webdriver.support.ui import WebDriverWait
 # from selenium.webdriver.support import expected_conditions as EC
 
@@ -19,8 +19,8 @@ id = "kitri"
 password = "kitri0908"
 file_name = "Saramin.txt"
 ELEMENT_COUNT_PER_PAGE = 20
-PAGE_COUNT = 10
-search_count = 100 # 찾는 자료 갯수 설저
+PAGE_COUNT = 15
+search_count = 300 # 찾는 자료 갯수 설정
 start_age = 0    # 검색 시작 나이<동작안함
 end_age = 0      # 검색 시작 나이<동작안함
 
@@ -30,10 +30,10 @@ driver = wd.Chrome(executable_path='chromedriver.exe')
 # 사이트 접속, 로그인
 driver.get(main_url)
 driver.implicitly_wait(2)
-driver.find_element_by_id('btn_tab_com').click()
+driver.find_element_by_id('login_tab_company').click()
 driver.find_element_by_name('id').send_keys(id)
 driver.find_element_by_name('password').send_keys(password)
-driver.find_element_by_id('login_btn').click()
+driver.find_element_by_xpath('//*[@id="login_frm"]/fieldset/div/button').click()
 driver.implicitly_wait(2)
 
 driver.get(search_url)
@@ -51,8 +51,11 @@ driver.implicitly_wait(2)
 #driver.find_element_by_id('min-age').find_element_by_link_text("28세 (1991년)").click()
 #driver.find_element_by_xpath('//*[@id="max-age"]/option[13]').click()#29
 #driver.find_element_by_xpath('//*[@id="min-age"]/option[4]').click() #31
-driver.find_element_by_xpath('//*[@id="max-age"]/option[10]').click() #26
-driver.find_element_by_xpath('//*[@id="min-age"]/option[4]').click()  #28
+#driver.find_element_by_xpath('//*[@id="max-age"]/option[10]').click() #26
+#driver.find_element_by_xpath('//*[@id="min-age"]/option[4]').click()  #28
+driver.find_element_by_xpath('//*[@id="max-age"]/option[5]').click()  #21
+driver.find_element_by_xpath('//*[@id="min-age"]/option[6]').click()  #25
+
 time.sleep(2) #페이지 이동간 대기
 
 #Element 확인 (검색된 전체 인원 파악)
@@ -136,10 +139,8 @@ for next_count in range(1,page_count): #next 버튼
     next_button = driver.find_elements_by_class_name('btn_next')
     next_button[0].click()
     time.sleep(3)
-#__________________________________________________________________
+#==============================================
 f.close()
 driver.close()
 driver.quit()
 sys.exit()
-
-
