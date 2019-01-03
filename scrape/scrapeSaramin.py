@@ -21,7 +21,7 @@ password = "kitri0908"
 file_name = "Saramin.txt"
 ELEMENT_COUNT_PER_PAGE = 20
 PAGE_COUNT = 15
-search_count = 300 # 찾는 자료 갯수 설정
+search_count = 0   # 찾는 자료 갯수 설정
 start_age = 0      # 검색 시작 나이<동작안함
 end_age = 0        # 검색 시작 나이<동작안함
 
@@ -43,22 +43,14 @@ driver.find_element_by_id('btn-display-save-list').click() #저장된 설정 가
 driver.implicitly_wait(2)
 
 save_option_area = driver.find_element_by_id('save_option_area')
-#save_option_condition = save_option_area.find_elements_by_class_name('btn_search btn_typ_b3')
 save_option_condition = save_option_area.find_elements_by_class_name('title')
 print(save_option_condition[1])
 save_option_condition[1].click()
 driver.implicitly_wait(2)
 
 # 나이 입력
-#driver.find_element_by_id('max-age').find_element_by_link_text("26세 (1993년)").click()
-#driver.find_element_by_id('min-age').find_element_by_link_text("28세 (1991년)").click()
-#driver.find_element_by_xpath('//*[@id="max-age"]/option[13]').click()#29
-#driver.find_element_by_xpath('//*[@id="min-age"]/option[4]').click() #31
-#driver.find_element_by_xpath('//*[@id="max-age"]/option[10]').click() #26
-#driver.find_element_by_xpath('//*[@id="min-age"]/option[4]').click()  #28
 driver.find_element_by_xpath('//*[@id="max-age"]/option[5]').click()  #21
 driver.find_element_by_xpath('//*[@id="min-age"]/option[12]').click()  #31
-
 time.sleep(2) #페이지 이동간 대기
 
 #Element 확인 (검색된 전체 인원 파악)
@@ -67,39 +59,59 @@ page_count = element_count // ELEMENT_COUNT_PER_PAGE # TOTAL PAGE COUNT
 list_count = element_count // (ELEMENT_COUNT_PER_PAGE*PAGE_COUNT)
 
 print('-------------------------------------------------------')
-print(element_count, type(element_count))
+print(element_count)
 print(page_count)
 print(list_count)
 print('-------------------------------------------------------')
+search_count = element_count
 
 f = open(file_name,'w')
-count = 0;
+count = 1
+
+next_button = driver.find_elements_by_class_name('btn_next')
+next_button[1].click()
+time.sleep(3)
+
+next_button = driver.find_elements_by_class_name('btn_next')
+next_button[1].click()
+time.sleep(3)
+
+next_button = driver.find_elements_by_class_name('btn_next')
+next_button[1].click()
+time.sleep(3)
+
+next_button = driver.find_elements_by_class_name('btn_next')
+next_button[1].click()
+time.sleep(10)
 
 # 페이지 이동하는 코드
-count = 1
-for next_count in range(0,page_count): #next 버튼
+for next_btn_count in range(0,page_count-2): #next 버튼 관리
     pages_url = driver.find_elements_by_class_name("page")
-    #driver.find_element_by_xpath('//*[@id="pagingArea"]/div/button[10]').click()
+    current_url = driver.current_url  # 현재 url 저장
     for index in range(0,10):
-        pages_url = driver.find_elements_by_class_name("page")
-        pages_url[index].click()
-        time.sleep(2)  # 페이지 이동간 대기
+        try:
+            pages_url = driver.find_elements_by_class_name("page")
+            pages_url[index].click()
+            time.sleep(2)  # 페이지 이동간 대기
+
+        except Exception as e1:
+            print('오류', e1)
 
         #각 타이틀별로 url 이동
-        current_url = driver.current_url #현재 url 저장
+
         people_title = []
         people_url = []
         people_title = driver.find_elements_by_xpath("//a[@class = 'title resumeSubject']")
 
-        #각 타이틀의 URL 저장 (20개씩)
+        #Page 당 각 지원자들의 URL 저장 (20개씩)
         for p_title in people_title:
             try:
                 p_url = p_title.get_attribute('href')
                 people_url.append(p_url)
             except Exception as e2:
                 print('오류', e2)
-
-        #각 타이틀의 URL로 이동
+        # -----------------------------------------------------------------------
+        #각 지원자들의 URL로 이동
         for p_url in people_url:
             try:
                 driver.get(p_url) #
@@ -138,14 +150,18 @@ for next_count in range(0,page_count): #next 버튼
                 driver.switch_to.alert.accept() #Popup Dialogs is confirmed
                 time.sleep(2)  # 페이지 이동간 대기
                 continue
-
-    driver.get(current_url) #검색된 페이지로 이동
-    driver.find_element_by_class_name('btn_box_close').click()  # 팝업없애기
+        # -----------------------------------------------------------------------
+        driver.get(current_url)
+        try:
+            driver.find_element_by_class_name('btn_box_close').click()  # 팝업없애기
+        except Exception as e4:
+            continue
+        time.sleep(2)
+    #----------------------------------------------------------------------------
     next_button = driver.find_elements_by_class_name('btn_next')
     next_button[1].click()
     time.sleep(3)
-
-#==============================================
+#--------------------------------------------------------------------------------
 f.close()
 driver.close()
 driver.quit()
